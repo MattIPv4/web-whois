@@ -5,7 +5,8 @@
     "main": "src/index.js",
     "keywords": [],
     "scripts": {
-        "test": "npm run test:eslint",
+        "test": "npm run test:eslint && npm run test:script",
+        "test:script": "node test/test.js --unhandled-rejections=strict",
         "test:eslint": "eslint '**/*.js'",
         "test:eslint:fix": "npm run test:eslint -- --fix"
     },
