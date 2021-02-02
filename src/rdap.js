@@ -1,8 +1,5 @@
 const fetch = require('node-fetch');
-const { consistentResultObj } = require('./util');
-
-// Unique values in an array, comma-separated
-const uniqueCommaSep = arr => [...new Set(arr)].join(', ');
+const { uniqueCommaSep, consistentResultObj, consistentResult } = require('./util');
 
 // Find RDAP data entities that match a name
 const findEntities = (name, data) => data.entities && data.entities.filter(entity =>
@@ -83,6 +80,6 @@ module.exports = async query => {
         abuse: findAbuseEmail(data.data),
     });
 
-    // Return false if we found nothing, otherwise return the data
-    return Object.values(result).every(x => x === undefined) ? false : result;
+    // Done
+    return consistentResult(result);
 };

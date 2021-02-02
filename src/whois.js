@@ -1,5 +1,5 @@
 const fetch = require('node-fetch');
-const { consistentResultObj } = require('./util');
+const { consistentResultObj, consistentResult } = require('./util');
 
 const parseWhois = text => {
     // RegExp parts
@@ -83,6 +83,6 @@ module.exports = async query => {
         abuse: findAttribute('registrar abuse contact email', data),
     });
 
-    // Return false if we found nothing, otherwise return the data
-    return Object.values(result).every(x => x === undefined) ? false : result;
+    // Done
+    return consistentResult(result);
 };

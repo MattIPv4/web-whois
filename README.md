@@ -4,11 +4,12 @@ Perform RDAP/WHOIS lookups over HTTP
 
 ---
 
-The package will attempt to use RDAP data primarily, and will return this if it finds results.
-Failing that, it will then perform a standard WHOIS lookup and parse limited results from that.
+The package will attempt to perform an RDAP lookup of the query, as well as a WHOIS lookup and a
+ call to the cfwho service for the query. These results are then combined, preferring data from
+ RDAP, WHOIS and then cfwho.
 
-The second argument of the method can be set to `true` to indicate that the package should perform
- both lookups and combine the results, with the RDAP data being preferred.
+The second argument of the method can be set to `true` to indicate that the package should return
+ the first set of results that it finds, without performing any combining.
 
 ```javascript
 const lookup = require('web-whois');

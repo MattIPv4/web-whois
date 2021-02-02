@@ -1,21 +1,35 @@
 const rdapLookup = require('./rdap');
 const whoisLookup = require('./whois');
+const cfwhoLookup = require('./cfwho');
+const { consistentResultObj, consistentResult } = require('./util');
 
-// TODO: Ingest cfwho.com as third source of info
+const combineResults = dataArr => {
+    const result = {};
+    for (const data of dataArr)
+        for (const key of data)
+            if (data[key] && !result[key]) result[key] = data[key];
+    return consistentResult(consistentResultObj(result));
+};
 
-module.exports = async (query, combine = false) => {
+module.exports = async (query, first = false) => {
     // Do the RDAP lookup
     const rdap = await rdapLookup(query);
 
-    // If we have RDAP data and don't need to combine, return it
-    if (rdap && !combine) return rdap;
+    // If we have RDAP data and want just the first, return it
+    if (rdap && first) return rdap;
 
-    // Doo the WHOIS lokkup
+    // Do the WHOIS lokkup
     const whois = await whoisLookup(query);
 
-    // Combine if we can and need to (preferring RDAP)
-    if (combine && (rdap || whois)) return { ...(whois || {}), ...(rdap || {}) };
+    // If we have WHOIS data and want just the first, return it
+    if (whois && first) return whois;
 
-    // Return just the WHOIS data
-    return whois;
+    // Do the cfwho lokkup
+    const cfwho = await cfwhoLookup(query);
+
+    // If we have cfwho data and want just the first, return it
+    if (cfwho && first) return cfwho;
+
+    // Combine the results (preferring RDAP, WHOIS, then cfwho)
+    return combineResults([rdap, whois, cfwho]);
 };
