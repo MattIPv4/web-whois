@@ -1,6 +1,8 @@
 const rdapLookup = require('./rdap');
 const whoisLookup = require('./whois');
 
+// TODO: Ingest cfwho.com as third source of info
+
 module.exports = async (query, combine = false) => {
     // Do the RDAP lookup
     const rdap = await rdapLookup(query);
