@@ -1,0 +1,20 @@
+{
+  "name": "web-whois",
+  "version": "0.0.1",
+  "description": "Perform RDAP/WHOIS lookups over HTTP",
+  "main": "src/index.js",
+  "keywords": [],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MattIPv4/web-whois.git"
+  },
+  "author": "Matt (IPv4) Cowley",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/MattIPv4/web-whois/issues"
+  },
+  "homepage": "https://github.com/MattIPv4/web-whois#readme",
+  "dependencies": {
+    "node-fetch": "^2.6.1"
+  }
+}
