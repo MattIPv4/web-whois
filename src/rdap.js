@@ -3,7 +3,7 @@ const { uniqueCommaSep, consistentResultObj, consistentResult } = require('./uti
 
 // Find RDAP data entities that match a name
 const findEntities = (name, data) => data.entities && data.entities.filter(entity =>
-    entity.roles.map(role => role.trim().toLowerCase()).includes(name));
+    entity.roles && entity.roles.map(role => role.trim().toLowerCase()).includes(name));
 
 // Find a specific vcard for an RDAP entity
 const entityVcard = (entity, vcard) => {
