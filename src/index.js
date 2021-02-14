@@ -6,8 +6,9 @@ const { consistentResultObj, consistentResult } = require('./util');
 const combineResults = dataArr => {
     const result = {};
     for (const data of dataArr)
-        for (const key of data)
-            if (data[key] && !result[key]) result[key] = data[key];
+        for (const key in data)
+            if (Object.prototype.hasOwnProperty.call(data, key))
+                if (data[key] && !result[key]) result[key] = data[key];
     return consistentResult(consistentResultObj(result));
 };
 
@@ -31,5 +32,5 @@ module.exports = async (query, first = false) => {
     if (cfwho && first) return cfwho;
 
     // Combine the results (preferring RDAP, WHOIS, then cfwho)
-    return combineResults([rdap, whois, cfwho]);
+    return combineResults([rdap || {}, whois || {}, cfwho || {}]);
 };
