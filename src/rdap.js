@@ -56,7 +56,9 @@ const findAbuseEmail = data => {
     const registrarEntities = findEntities('registrar', data);
     if (!registrarEntities) return;
 
-    return findEntityEmail('abuse', { entities: registrarEntities.map(entity => entity.entities).flat(1) });
+    return findEntityEmail('abuse', {
+        entities: registrarEntities.map(entity => entity.entities).flat(1).filter(entity => entity !== undefined),
+    });
 };
 
 module.exports = async query => {

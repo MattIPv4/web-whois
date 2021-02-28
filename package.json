@@ -1,6 +1,6 @@
 {
     "name": "web-whois",
-    "version": "0.0.4",
+    "version": "0.0.5",
     "description": "Perform RDAP/WHOIS lookups over HTTP",
     "main": "src/index.js",
     "keywords": [],
