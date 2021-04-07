@@ -1,12 +1,15 @@
 const fetch = require('node-fetch');
 const { consistentResultObj, consistentResult } = require('./util');
 
+const normalizeKey = text => `${text}`.toLowerCase().trim().replace(/[-_]/g, ' ');
+const normalizeValue = text => `${text}`.trim();
+
 const parseWhois = text => {
     // RegExp parts
     const reLinebreak = '\\r\\n';
     const reWhitespace = `[^\\S${reLinebreak}]`;
-    const reKey = '([a-zA-Z\\s]+):';
-    const reText = `([^${reLinebreak}]+)`;
+    const reKey = '([a-zA-Z\\-\\s]+):';
+    const reText = `([^\\s${reLinebreak}][^${reLinebreak}]*)`;
     const reLineStart = `^${reWhitespace}*${reKey}`;
     const reLineEnd = `${reWhitespace}+${reText}$`;
 
@@ -27,8 +30,8 @@ const parseWhois = text => {
     for (const rawMatch of singleLineMatches) {
         const match = rawMatch.trim().match(regExpSingleLine);
         matches.push({
-            key: match[1],
-            value: match[2],
+            key: normalizeKey(match[1]),
+            value: normalizeValue(match[2]),
         });
     }
 
@@ -39,8 +42,8 @@ const parseWhois = text => {
 
         const match = rawMatch.trim().match(regExpSplitLine);
         matches.push({
-            key: match[1],
-            value: match[2],
+            key: normalizeKey(match[1]),
+            value: normalizeValue(match[2]),
         });
     }
 
@@ -49,14 +52,16 @@ const parseWhois = text => {
 };
 
 // Find an attribute value from the WHOIS data
-const findAttribute = (name, data) => {
-    const entry = data.find(entry => entry.key.trim().toLowerCase() === name);
-    return entry && entry.value && `${entry.value}`.trim();
+const findAttribute = (names, data) => {
+    for (const name of names) {
+        const entry = data.find(entry => entry.key === name);
+        if (entry && entry.value) return entry.value;
+    }
 };
 
 // Find a JS Date for an attribute from the WHOIS data
-const findAttributeDate = (name, data) => {
-    const attribute = findAttribute(name, data);
+const findAttributeDate = (names, data) => {
+    const attribute = findAttribute(names, data);
     if (!attribute) return;
     return new Date(attribute);
 };
@@ -76,11 +81,11 @@ module.exports = async query => {
 
     // Find the useful information for us
     const result = consistentResultObj({
-        registrant: findAttribute('registrant', data),
-        registrar: findAttribute('registrar', data) || findAttribute('organisation', data),
-        registration: findAttributeDate('creation date', data) || findAttributeDate('registered on', data),
-        expiration: findAttributeDate('registry expiry date', data) || findAttributeDate('expiry date', data),
-        abuse: findAttribute('registrar abuse contact email', data),
+        registrant: findAttribute(['registrant'], data),
+        registrar: findAttribute(['registrar', 'organisation'], data),
+        registration: findAttributeDate(['creation date', 'created', 'registered on'], data),
+        expiration: findAttributeDate(['registry expiry date', 'expiry date'], data),
+        abuse: findAttribute(['registrar abuse contact email'], data),
     });
 
     // Done
