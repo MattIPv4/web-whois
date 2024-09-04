@@ -15,6 +15,18 @@ module.exports = async () => {
         abuse: 'domain.operations@web.com',
     });
 
+    const resultJpDomain = await whoisLookup('jprs.jp');
+    assert.deepEqual(resultJpDomain, {
+        name: undefined,
+        registrant: 'Japan Registry Services Co.,Ltd.',
+        asn: undefined,
+        registrar: undefined,
+        registration: new Date('2001-02-02T00:00:00+09:00'),
+        expiration: new Date('2025-02-28T00:00:00+09:00'),
+        cidr: undefined,
+        abuse: undefined,
+    });
+
     // WHOISJS does not support IPs
     const resultIp = await whoisLookup('104.16.181.15');
     assert.equal(resultIp, false);
