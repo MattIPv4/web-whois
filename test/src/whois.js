@@ -10,9 +10,9 @@ module.exports = async () => {
         asn: undefined,
         registrar: 'Network Solutions, LLC',
         registration: new Date('2000-04-12T10:36:48.000Z'),
-        expiration: new Date('2023-04-12T10:36:48.000Z'),
+        expiration: new Date('2028-04-12T10:36:48.000Z'),
         cidr: undefined,
-        abuse: 'abuse@web.com',
+        abuse: 'domain.operations@web.com',
     });
 
     // WHOISJS does not support IPs
