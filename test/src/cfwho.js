@@ -9,7 +9,7 @@ module.exports = async () => {
     // Data here is potentially fragile
     const resultIp = await cfwhoLookup('104.16.181.15');
     assert.deepEqual(resultIp, {
-        name: 'CLOUDFLARENET, US',
+        name: 'Cloudflare, Inc.',
         registrant: undefined,
         asn: '13335',
         registrar: undefined,

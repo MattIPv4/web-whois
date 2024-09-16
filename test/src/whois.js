@@ -10,9 +10,21 @@ module.exports = async () => {
         asn: undefined,
         registrar: 'Network Solutions, LLC',
         registration: new Date('2000-04-12T10:36:48.000Z'),
-        expiration: new Date('2023-04-12T10:36:48.000Z'),
+        expiration: new Date('2028-04-12T10:36:48.000Z'),
         cidr: undefined,
-        abuse: 'abuse@web.com',
+        abuse: 'domain.operations@web.com',
+    });
+
+    const resultJpDomain = await whoisLookup('jprs.jp');
+    assert.deepEqual(resultJpDomain, {
+        name: undefined,
+        registrant: 'Japan Registry Services Co.,Ltd.',
+        asn: undefined,
+        registrar: undefined,
+        registration: new Date('2001-02-02T00:00:00.000Z'),
+        expiration: new Date('2025-02-28T00:00:00.000Z'),
+        cidr: undefined,
+        abuse: undefined,
     });
 
     // WHOISJS does not support IPs

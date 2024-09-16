@@ -8,7 +8,9 @@ const parseWhois = text => {
     // RegExp parts
     const reLinebreak = '\\r\\n';
     const reWhitespace = `[^\\S${reLinebreak}]`;
-    const reKey = '([a-zA-Z\\-\\s]+):';
+    const reKeyColon = '([a-zA-Z\\-\\s]+):';
+    const reKeyBrackets = '\\[([a-zA-Z\\-\\s登録年月日有効期限]+)\\]';
+    const reKey = `(${reKeyColon}|${reKeyBrackets})`;
     const reText = `([^\\s${reLinebreak}][^${reLinebreak}]*)`;
     const reLineStart = `^${reWhitespace}*${reKey}`;
     const reLineEnd = `${reWhitespace}+${reText}$`;
@@ -30,8 +32,8 @@ const parseWhois = text => {
     for (const rawMatch of singleLineMatches) {
         const match = rawMatch.trim().match(regExpSingleLine);
         matches.push({
-            key: normalizeKey(match[1]),
-            value: normalizeValue(match[2]),
+            key: normalizeKey(match[2] || match[3]),
+            value: normalizeValue(match[4]),
         });
     }
 
@@ -42,8 +44,8 @@ const parseWhois = text => {
 
         const match = rawMatch.trim().match(regExpSplitLine);
         matches.push({
-            key: normalizeKey(match[1]),
-            value: normalizeValue(match[2]),
+            key: normalizeKey(match[2] || match[3]),
+            value: normalizeValue(match[4]),
         });
     }
 
@@ -83,8 +85,8 @@ module.exports = async query => {
     const result = consistentResultObj({
         registrant: findAttribute(['registrant'], data),
         registrar: findAttribute(['registrar', 'organisation'], data),
-        registration: findAttributeDate(['creation date', 'created', 'registered on'], data),
-        expiration: findAttributeDate(['registry expiry date', 'expiry date'], data),
+        registration: findAttributeDate(['creation date', 'created', 'registered on', '登録年月日'], data),
+        expiration: findAttributeDate(['registry expiry date', 'expiry date', '有効期限'], data),
         abuse: findAttribute(['registrar abuse contact email'], data),
     });
 
