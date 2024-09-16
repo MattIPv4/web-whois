@@ -21,8 +21,8 @@ module.exports = async () => {
         registrant: 'Japan Registry Services Co.,Ltd.',
         asn: undefined,
         registrar: undefined,
-        registration: new Date('2001-02-02T00:00:00+09:00'),
-        expiration: new Date('2025-02-28T00:00:00+09:00'),
+        registration: new Date('2001-02-02T00:00:00.000Z'),
+        expiration: new Date('2025-02-28T00:00:00.000Z'),
         cidr: undefined,
         abuse: undefined,
     });
